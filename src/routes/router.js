@@ -1,5 +1,6 @@
 import Express from "express";
-import { webRoutes } from "./web/web-routes.js";
+import { webRoutes } from "./web-routes.js";
+import { apiRoutes } from "./api-routes.js";
 
 class Router {
   #_router = Express.Router();
@@ -16,7 +17,9 @@ class Router {
     this.#attachRoutes(webRoutes);
   }
 
-  #attachApiRoutes() {}
+  #attachApiRoutes() {
+    this.#attachRoutes(apiRoutes, "/api");
+  }
 
   #attachRoutes(routesGroup, prefix = "") {
     routesGroup.forEach(({ domain, routes }) => {

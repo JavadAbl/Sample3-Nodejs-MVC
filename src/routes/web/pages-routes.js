@@ -1,4 +1,4 @@
-import { webController } from "../../controllers/web-controller.js";
+import { pageController } from "#controllers/web/web-controller.js";
 
 export const pageRoutes = {
   domain: "/pages",
@@ -7,13 +7,13 @@ export const pageRoutes = {
     {
       method: "get",
       path: "/",
-      handler: webController.home,
+      handler: pageController.home,
     },
 
     {
       method: "get",
       path: "/about",
-      handler: webController.about,
+      handler: pageController.about,
     },
   ],
 };

@@ -1,4 +1,4 @@
-class WebController {
+class PageController {
   home(req, res) {
     res.end("Welcome to the Home Page");
   }
@@ -8,4 +8,4 @@ class WebController {
   }
 }
 
-export const webController = new WebController();
+export const pageController = new PageController();

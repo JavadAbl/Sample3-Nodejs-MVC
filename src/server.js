@@ -1,8 +1,6 @@
 import { createServer } from "http";
 import Express from "express";
 import { router } from "./routes/router.js";
-import { db } from "#database/db.js";
-import { sync } from "#database/db-sync.js";
 
 export class Server {
   #server;
@@ -15,24 +13,18 @@ export class Server {
     this.#app = Express();
     this.#server = createServer(this.#app);
     this.#router = router;
+    this.#setupMiddlewares();
 
-    this.#createRouter();
-    this.#createDBConnection();
-
-    sync();
+    this.#setupRouter();
   }
 
-  #createRouter() {
+  #setupMiddlewares() {
+    this.#app.use(Express.json());
+    this.#app.use(Express.urlencoded());
+  }
+
+  #setupRouter() {
     this.#router.create(this.#app);
-  }
-
-  async #createDBConnection() {
-    try {
-      await db.sequelize.authenticate();
-      console.log("Connection has been established successfully.");
-    } catch (error) {
-      console.error("Unable to connect to the database:", error);
-    }
   }
 
   listen() {
