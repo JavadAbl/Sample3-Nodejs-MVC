@@ -1,6 +1,5 @@
-import { promisify } from "util";
-import jwt from "jsonwebtoken";
 import { userRepository } from "#repositories/user.repository.js";
+import { TokenGenerator } from "#utils/auth-utils/token-generator.js";
 import { AppError } from "#utils/error-utils/app-error.js";
 import { hash, compare } from "bcryptjs";
 
@@ -15,9 +14,12 @@ class UserService {
 
     if (!isPasswordOk) throw new AppError("wrong password", 401);
 
-    const token = await this.#createJWT({ id: user.id });
+    const accessToken = await TokenGenerator.generateAccessToken({
+      id: user.id,
+    });
+    const refreshToken = await TokenGenerator.generateRefreshToken();
 
-    return { ...user, token };
+    return { ...user, accessToken, refreshToken };
   }
 
   //register-------------------------------------------------------------
@@ -36,14 +38,10 @@ class UserService {
 
     newUser = await userRepository.create(newUser);
 
-    const token = await this.#createJWT({ id: newUser.id });
+    const accessToken = await TokenGenerator.generateAccessToken(newUser.id);
+    const refreshToken = await TokenGenerator.generateRefreshToken();
 
-    return { ...newUser, token };
-  }
-
-  //createJWT----------------------------------------------------------
-  async #createJWT(payload) {
-    return await promisify(jwt.sign)(payload, "secret", { expiresIn: 0 });
+    return { ...newUser, accessToken, refreshToken };
   }
 }
 
