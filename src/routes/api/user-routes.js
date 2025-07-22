@@ -7,13 +7,19 @@ export const userRoutes = {
     {
       method: "post",
       path: "/login",
-      handler: userController.login,
+      handler: (req, res) => userController.login(req, res),
     },
 
     {
       method: "post",
       path: "/register",
-      handler: userController.register,
+      handler: (req, res) => userController.register(req, res),
+    },
+
+    {
+      method: "get",
+      path: "/GetAll",
+      handler: (req, res) => userController.getAll(req, res),
     },
   ],
 };

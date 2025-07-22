@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
 import { createServer } from "http";
 import Express from "express";
 import { router } from "./routes/router.js";
+import { ProblemDetailsFactory } from "#utils/error-utils/problem-details/problem-details-factory.js";
 
 export class Server {
   #server;
@@ -13,9 +15,22 @@ export class Server {
     this.#app = Express();
     this.#server = createServer(this.#app);
     this.#router = router;
-    this.#setupMiddlewares();
 
+    this.#setupMiddlewares();
     this.#setupRouter();
+    this.#setupErrorHanlders();
+  }
+
+  #setupErrorHanlders() {
+    this.#app.use((err, req, res, next) => {
+      const status = err.status ?? 500;
+
+      ProblemDetailsFactory.send(res, {
+        status,
+        detail: err.message,
+        stack: err.stack,
+      });
+    });
   }
 
   #setupMiddlewares() {

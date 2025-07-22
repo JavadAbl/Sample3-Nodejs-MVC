@@ -1,22 +1,25 @@
-import { prismaClient } from "#database/prisma-client.js";
+import { userRepository } from "#repositories/user.repository.js";
+import { userService } from "#services/user-service.js";
 
 class UserController {
+  //Login-------------------------------------------------------------------
   async login(req, res) {
-    const { email, password } = req.body;
-
-    const user = await prismaClient.user.findUnique({
-      where: {
-        email,
-      },
-    });
-
-    if (!user) return res.json("user not found");
-
-    if (password !== user.password) return res.json("user not found");
+    const userDto = await userService.login(req.body);
+    return res.json(userDto);
   }
 
-  register(req, res) {
-    res.end("Welcome to the About Page");
+  //register-------------------------------------------------------------------
+  async register(req, res) {
+    const userDto = await userService.register(req.body);
+
+    return res.status(201).json(userDto);
+  }
+
+  //getAll-------------------------------------------------------------------
+  async getAll(req, res) {
+    const users = await userRepository.findAll();
+
+    return res.json(users);
   }
 }
 
