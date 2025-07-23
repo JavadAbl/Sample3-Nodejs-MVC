@@ -18,7 +18,7 @@ export const userRoutes = {
 
     {
       method: "get",
-      path: "/GetAll",
+      path: "/",
       handler: (req, res) => userController.getAll(req, res),
     },
   ],

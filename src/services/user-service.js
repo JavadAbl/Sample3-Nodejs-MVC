@@ -1,4 +1,5 @@
-import { userRepository } from "#repositories/user.repository.js";
+import { tokenRepository } from "#repositories/token-repository.js";
+import { userRepository } from "#repositories/user-repository.js";
 import { TokenGenerator } from "#utils/auth-utils/token-generator.js";
 import { AppError } from "#utils/error-utils/app-error.js";
 import { hash, compare } from "bcryptjs";
@@ -18,6 +19,8 @@ class UserService {
       id: user.id,
     });
     const refreshToken = await TokenGenerator.generateRefreshToken();
+
+    await tokenRepository.create({ token: refreshToken, userId: user.id });
 
     return { ...user, accessToken, refreshToken };
   }
