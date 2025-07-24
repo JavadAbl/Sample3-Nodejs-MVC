@@ -2,7 +2,9 @@
 import { createServer } from "http";
 import Express from "express";
 import { router } from "./routes/router.js";
-import { ProblemDetailsFactory } from "#utils/error-utils/problem-details/problem-details-factory.js";
+import { errorMiddleware } from "#middlewares/error-middleware.js";
+import hbs from "express-handlebars";
+import path from "path";
 
 export class Server {
   #server;
@@ -18,19 +20,18 @@ export class Server {
 
     this.#setupMiddlewares();
     this.#setupRouter();
+    this.#setupViewEngine();
     this.#setupErrorHanlders();
   }
 
   #setupErrorHanlders() {
-    this.#app.use((err, req, res, next) => {
-      const status = err.status ?? 500;
+    this.#app.use(errorMiddleware);
+  }
 
-      ProblemDetailsFactory.send(res, {
-        status,
-        detail: err.message,
-        stack: err.stack,
-      });
-    });
+  #setupViewEngine() {
+    this.#app.engine("handlebars", hbs.engine());
+    this.#app.set("view engine", "handlebars");
+    this.#app.set("views", path.resolve("src/views"));
   }
 
   #setupMiddlewares() {

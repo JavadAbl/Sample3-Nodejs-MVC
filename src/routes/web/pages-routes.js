@@ -1,7 +1,7 @@
 import { pageController } from "#controllers/web/web-controller.js";
 
 export const pageRoutes = {
-  domain: "/pages",
+  domain: "/",
 
   routes: [
     {

@@ -1,6 +1,6 @@
 class PageController {
   home(req, res) {
-    res.end("Welcome to the Home Page");
+    res.render("home", {});
   }
 
   about(req, res) {

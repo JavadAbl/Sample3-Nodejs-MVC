@@ -1,5 +1,5 @@
 import { BaseRepository } from "./base-repository.js";
-import { prismaClient } from "#database/prisma-client.js";
+import { prismaClient } from "#infrastructure/database/prisma-client.js";
 
 class TokenRepository extends BaseRepository {
   constructor() {

@@ -22,9 +22,14 @@ class Router {
   }
 
   #attachRoutes(routesGroup, prefix = "") {
-    routesGroup.forEach(({ domain, routes }) => {
-      routes.forEach(({ method, path, handler }) => {
-        this.#_router[method](prefix + domain + path, handler);
+    routesGroup.forEach(({ domain, routes, groupMiddlewares = [] }) => {
+      routes.forEach(({ method, path, handler, middlewares = [] }) => {
+        this.#_router[method](
+          prefix + domain + path,
+          ...groupMiddlewares,
+          ...middlewares,
+          handler
+        );
       });
     });
   }
