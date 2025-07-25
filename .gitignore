@@ -1,5 +1,6 @@
 **/app.db
 **/generated
+**/logs
 
 # Node.js
 node_modules/

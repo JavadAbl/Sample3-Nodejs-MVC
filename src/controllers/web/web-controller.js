@@ -1,10 +1,15 @@
 class PageController {
   home(req, res) {
+    throw new Error("app error");
     res.render("home", {});
   }
 
+  profile(req, res) {
+    res.render("profile", {});
+  }
+
   about(req, res) {
-    res.end("Welcome to the About Page");
+    res.render("about", {});
   }
 }
 

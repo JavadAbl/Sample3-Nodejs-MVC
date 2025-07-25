@@ -5,6 +5,9 @@ import { router } from "./routes/router.js";
 import { errorMiddleware } from "#middlewares/error-middleware.js";
 import hbs from "express-handlebars";
 import path from "path";
+import { createLogger } from "#utils/logger/logger.js";
+
+const logger = createLogger("Server");
 
 export class Server {
   #server;
@@ -22,6 +25,8 @@ export class Server {
     this.#setupRouter();
     this.#setupViewEngine();
     this.#setupErrorHanlders();
+
+    logger.info("Server Started");
   }
 
   #setupErrorHanlders() {

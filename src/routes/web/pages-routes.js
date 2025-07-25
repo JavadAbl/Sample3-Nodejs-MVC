@@ -9,10 +9,14 @@ export const pageRoutes = {
       path: "/",
       handler: pageController.home,
     },
-
     {
       method: "get",
-      path: "/about",
+      path: "profile",
+      handler: pageController.profile,
+    },
+    {
+      method: "get",
+      path: "about",
       handler: pageController.about,
     },
   ],
