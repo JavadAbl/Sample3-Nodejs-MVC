@@ -1,6 +1,7 @@
 **/app.db
 **/generated
 **/logs
+**/uploads
 
 # Node.js
 node_modules/

@@ -1,9 +1,7 @@
 class FactorController {
   //create-------------------------------------------------------------------
   async create(req, res) {
-    console.log(req.body);
-
-    return res.json(req.body);
+    return res.json(req.files);
   }
 
   //getAll-------------------------------------------------------------------
