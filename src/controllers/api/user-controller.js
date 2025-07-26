@@ -1,5 +1,5 @@
-import { LoginDto } from "#dto/user-dto/login-dto.js";
-import { RegisterDto } from "#dto/user-dto/register-dto.js";
+import { LoginDto } from "#dto/user/login-dto.js";
+import { RegisterDto } from "#dto/user/register-dto.js";
 import { userService } from "#services/user-service.js";
 
 class UserController {

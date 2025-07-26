@@ -1,3 +1,4 @@
+import { UserDto } from "#dto/user/user.dto.js";
 import { tokenRepository } from "#infrastructure/database/repositories/token-repository.js";
 import { userRepository } from "#infrastructure/database/repositories/user-repository.js";
 import { emailProvider } from "#infrastructure/email/email-provider.js";
@@ -30,7 +31,9 @@ class UserService {
       text: "Thanks for registering!",
     });
 
-    return { ...user, accessToken, refreshToken };
+    const userDto = new UserDto(user);
+
+    return { ...userDto, accessToken, refreshToken };
   }
 
   //register-------------------------------------------------------------
@@ -55,12 +58,15 @@ class UserService {
     });
     const refreshToken = await TokenGenerator.generateRefreshToken();
 
-    return { ...newUser, accessToken, refreshToken };
+    const userDto = new UserDto(newUser);
+
+    return { ...userDto, accessToken, refreshToken };
   }
 
   //GetAll---------------------------------------------------------
-  getAll() {
-    return userRepository.findAll();
+  async getAll() {
+    const users = await userRepository.findAll();
+    return await users.map((user) => new UserDto(user));
   }
 }
 
