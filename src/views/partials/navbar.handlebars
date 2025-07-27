@@ -1,5 +1,13 @@
-<div>
-  <a href="/">Home</a>
-  <a href="/Profile">Profile</a>
-  <a href="/About">About</a>
-</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
+  <div class="d-flex justify-content-between w-100">
+    <div class="d-flex align-items-center">
+      <a class="navbar-brand" href="#">Admin Dashboard</a>
+
+      <span class="navbar-text ml-3">
+        Welcome, {{name}}
+      </span>
+    </div>
+
+    <button class="btn btn-outline-danger my-2 my-sm-0" type="button">Logout</button>
+  </div>
+</nav>

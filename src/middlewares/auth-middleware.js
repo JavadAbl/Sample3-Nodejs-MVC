@@ -14,7 +14,16 @@ export async function authMiddleware(req, res, next) {
         new AppError("Invalid token provided, authorization denied", 401)
       );
 
-    req.user = await userRepository.findUnique("id", decoded.id);
+    const user = await userRepository.findUnique("id", decoded.id);
+    if (!user)
+      return next(
+        new AppError(
+          "there is no user attached to the token, authorization denied",
+          401
+        )
+      );
+
+    req.user = user;
 
     next();
   });

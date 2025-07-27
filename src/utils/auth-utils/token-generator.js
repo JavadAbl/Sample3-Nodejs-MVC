@@ -4,7 +4,7 @@ import { promisify } from "util";
 
 export class TokenGenerator {
   static generateAccessToken(payload) {
-    return promisify(jwt.sign)(payload, "secret", { expiresIn: "60m" });
+    return promisify(jwt.sign)(payload, "secret", { expiresIn: "72h" });
   }
 
   static async generateRefreshToken() {

@@ -6,6 +6,7 @@ import { errorMiddleware } from "#middlewares/error-middleware.js";
 import hbs from "express-handlebars";
 import path from "path";
 import { createLogger } from "#utils/logger/logger.js";
+import cookieParser from "cookie-parser";
 
 const logger = createLogger("Server");
 
@@ -40,8 +41,9 @@ export class Server {
   }
 
   #setupMiddlewares() {
+    this.#app.use(Express.urlencoded({ extended: true }));
     this.#app.use(Express.json());
-    this.#app.use(Express.urlencoded());
+    this.#app.use(cookieParser());
   }
 
   #setupRouter() {
