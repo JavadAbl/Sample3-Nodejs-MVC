@@ -25,12 +25,12 @@ export class Server {
     this.#setupMiddlewares();
     this.#setupRouter();
     this.#setupViewEngine();
-    this.#setupErrorHanlders();
+    this.#setupErrorHandlers();
 
     logger.info("Server Started");
   }
 
-  #setupErrorHanlders() {
+  #setupErrorHandlers() {
     this.#app.use(errorMiddleware);
   }
 
