@@ -1,18 +1,28 @@
-import { userRepository } from "#infrastructure/database/repositories/user-repository.js";
+/* eslint-disable no-unused-vars */
+import { appConfigs } from "#utils/app-utils/app-configs.js";
+import { TokenGenerator } from "#utils/auth-utils/token-generator.js";
 import jwt from "jsonwebtoken";
 
 export async function authPageMiddleware(req, res, next) {
-  const token = req.headers["authorization"]?.split(" ")[1];
+  const accessToken = req.cookies.accessToken;
+  const refreshToken = req.cookies.refreshToken;
 
-  if (!token) return res.redirect("/login");
-
-  jwt.verify(token, "secret", async (err, decoded) => {
-    if (err) return res.redirect("/login");
-
-    const user = await userRepository.findUnique("id", decoded.id);
-
+  try {
+    const user = jwt.verify(accessToken, appConfigs.ACCESS_TOKEN_SECRET);
     req.user = user;
+    return next();
+  } catch (err) {
+    if (!refreshToken) return res.redirect("/login");
 
-    next();
-  });
+    try {
+      const user = jwt.verify(refreshToken, appConfigs.REFERESH_TOKEN_SECRET);
+      const newAccessToken = await TokenGenerator.generateAccessToken(user);
+
+      res.cookie("accessToken", newAccessToken, { httpOnly: true });
+      req.user = user;
+      return next();
+    } catch (e) {
+      return res.redirect("/login");
+    }
+  }
 }

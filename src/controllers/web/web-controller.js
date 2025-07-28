@@ -5,9 +5,8 @@ class PageController {
   //home----------------------------------------------------------
   home(req, res) {
     const user = req.user;
-    console.log(user);
 
-    res.render("home", { name: user?.name });
+    res.render("home", { name: user?.email });
   }
 
   //login----------------------------------------------------------
@@ -21,7 +20,7 @@ class PageController {
   async loginPost(req, res) {
     const loginDto = new LoginDto(req.body);
 
-    const { userDto, error } = await userService.login(loginDto);
+    const { error, ...userDto } = await userService.login(loginDto);
 
     if (error) return res.redirect(`login?error=${encodeURIComponent(error)}`);
 

@@ -1,6 +1,5 @@
 import { pageController } from "#controllers/web/web-controller.js";
 import { authPageMiddleware } from "#middlewares/auth-page-middleware.js";
-import { formdataMiddleware } from "#middlewares/formdata-middleware.js";
 import { validateMiddleware } from "#middlewares/validate-middleware.js";
 import { UserValidators } from "#validators/user-validators.js";
 
@@ -27,8 +26,13 @@ export const pageRoutes = {
     {
       method: "post",
       path: "login",
-      // middlewares: [validateMiddleware(UserValidators.loginValidator)],
-      middlewares: [formdataMiddleware],
+      middlewares: [
+        (req, res, next) => {
+          res.locals.view = "login";
+          next();
+        },
+        validateMiddleware(UserValidators.loginValidator),
+      ],
       handler: (req, res) => pageController.loginPost(req, res),
     },
   ],
