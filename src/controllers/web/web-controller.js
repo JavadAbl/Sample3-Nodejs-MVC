@@ -20,14 +20,15 @@ class PageController {
   //loginPost----------------------------------------------------------
   async loginPost(req, res) {
     const loginDto = new LoginDto(req.body);
-    console.log("body:", req.body);
 
-    const userDto = await userService.login(loginDto);
+    const { userDto, error } = await userService.login(loginDto);
+
+    if (error) return res.redirect(`login?error=${encodeURIComponent(error)}`);
 
     res.cookie("accessToken", userDto.accessToken, { httpOnly: true });
     res.cookie("refreshToken", userDto.refreshToken, { httpOnly: true });
 
-    res.redirect("/");
+    return res.redirect("/");
   }
 
   //profile----------------------------------------------------------

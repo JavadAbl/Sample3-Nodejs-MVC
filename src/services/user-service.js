@@ -9,13 +9,15 @@ import { hash, compare } from "bcryptjs";
 class UserService {
   //login-------------------------------------------------------------
   async login(loginDto) {
+    console.log(loginDto);
+
     const user = await userRepository.findUnique("email", loginDto.email);
 
-    if (!user) throw new AppError("user not found", 400);
+    if (!user) return { error: "user not found" };
 
     const isPasswordOk = await compare(loginDto.password, user.password);
 
-    if (!isPasswordOk) throw new AppError("wrong password", 401);
+    if (!isPasswordOk) return { error: "wrong password" };
 
     const accessToken = await TokenGenerator.generateAccessToken({
       id: user.id,
