@@ -1,7 +1,7 @@
 import { pageController } from "#controllers/web/web-controller.js";
 import { authPageMiddleware } from "#middlewares/auth-page-middleware.js";
 import { validateMiddleware } from "#middlewares/validate-middleware.js";
-import { UserValidators } from "#validators/user-validators.js";
+import { UserValidator } from "#validators/user-validator.js";
 
 export const pageRoutes = {
   domain: "/",
@@ -31,7 +31,7 @@ export const pageRoutes = {
           res.locals.view = "login";
           next();
         },
-        validateMiddleware(UserValidators.loginValidator),
+        validateMiddleware(UserValidator.loginValidator),
       ],
       handler: (req, res) => pageController.loginPost(req, res),
     },

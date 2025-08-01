@@ -1,6 +1,7 @@
 import { LoginDto } from "#dto/user/login-dto.js";
 import { userService } from "#services/user-service.js";
 import { appConfigs } from "#utils/app-utils/app-configs.js";
+import { appConstants } from "#utils/app-utils/app-constants.js";
 import { TokenGenerator } from "#utils/auth-utils/token-generator.js";
 import jwt from "jsonwebtoken";
 
@@ -26,10 +27,13 @@ class PageController {
       if (!refreshToken) isAuthenticated = false;
 
       try {
-        const user = jwt.verify(refreshToken, appConfigs.REFERESH_TOKEN_SECRET);
+        const user = jwt.verify(refreshToken, appConfigs.REFRESH_TOKEN_SECRET);
         const newAccessToken = await TokenGenerator.generateAccessToken(user);
 
-        res.cookie("accessToken", newAccessToken, { httpOnly: true });
+        res.cookie("accessToken", newAccessToken, {
+          httpOnly: true,
+          expires: appConstants.ACCESS_TOKEN_EXPIRE,
+        });
         req.user = user;
         isAuthenticated = true;
       } catch (e) {
@@ -52,8 +56,14 @@ class PageController {
 
     if (error) return res.redirect(`login?error=${encodeURIComponent(error)}`);
 
-    res.cookie("accessToken", userDto.accessToken, { httpOnly: true });
-    res.cookie("refreshToken", userDto.refreshToken, { httpOnly: true });
+    res.cookie("accessToken", userDto.accessToken, {
+      httpOnly: true,
+      expires: appConstants.ACCESS_TOKEN_EXPIRE,
+    });
+    res.cookie("refreshToken", userDto.refreshToken, {
+      httpOnly: true,
+      expires: appConstants.REFRESH_TOKEN_EXPIRE,
+    });
 
     return res.redirect("/");
   }

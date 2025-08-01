@@ -7,6 +7,10 @@ import hbs from "express-handlebars";
 import path from "path";
 import { createLogger } from "#utils/logger/logger.js";
 import cookieParser from "cookie-parser";
+import { fileURLToPath } from "url";
+
+const _filename = fileURLToPath(import.meta.url);
+export const _dirname = path.dirname(_filename);
 
 const logger = createLogger("Server");
 
@@ -23,6 +27,7 @@ export class Server {
     this.#router = router;
 
     this.#setupMiddlewares();
+    this.#setupStaticFiles();
     this.#setupRouter();
     this.#setupViewEngine();
     this.#setupErrorHandlers();
@@ -35,7 +40,14 @@ export class Server {
   }
 
   #setupViewEngine() {
-    this.#app.engine("handlebars", hbs.engine());
+    this.#app.engine(
+      "handlebars",
+      hbs.engine({
+        helpers: {
+          numberToLocaleString: (price) => price.toLocaleString(),
+        },
+      })
+    );
     this.#app.set("view engine", "handlebars");
     this.#app.set("views", path.resolve("src/views"));
   }
@@ -44,6 +56,10 @@ export class Server {
     this.#app.use(Express.urlencoded({ extended: true }));
     this.#app.use(Express.json());
     this.#app.use(cookieParser());
+  }
+
+  #setupStaticFiles() {
+    this.#app.use(Express.static(path.join(_dirname, "..", "static")));
   }
 
   #setupRouter() {

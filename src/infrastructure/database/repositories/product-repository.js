@@ -1,10 +1,10 @@
 import { BaseRepository } from "./base-repository.js";
 import { prismaClient } from "#infrastructure/database/prisma-client.js";
 
-class TokenRepository extends BaseRepository {
+class ProductRepository extends BaseRepository {
   constructor() {
-    super(prismaClient.refreshTokens);
+    super(prismaClient.product);
   }
 }
 
-export const tokenRepository = new TokenRepository();
+export const productRepository = new ProductRepository();

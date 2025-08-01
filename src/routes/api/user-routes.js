@@ -1,6 +1,6 @@
 import { userController } from "#controllers/api/user-controller.js";
 import { validateMiddleware } from "#middlewares/validate-middleware.js";
-import { UserValidators } from "#validators/user-validators.js";
+import { UserValidator } from "#validators/user-validator.js";
 
 export const userRoutes = {
   domain: "/user",
@@ -9,14 +9,14 @@ export const userRoutes = {
     {
       method: "post",
       path: "/login",
-      middlewares: [validateMiddleware(UserValidators.loginValidator)],
+      middlewares: [validateMiddleware(UserValidator.loginValidator)],
       handler: (req, res) => userController.login(req, res),
     },
 
     {
       method: "post",
       path: "/register",
-      middlewares: [validateMiddleware(UserValidators.registerValidator)],
+      middlewares: [validateMiddleware(UserValidator.registerValidator)],
       handler: (req, res) => userController.register(req, res),
     },
 

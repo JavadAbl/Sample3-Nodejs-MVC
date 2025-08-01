@@ -1,0 +1,181 @@
+:root {
+  --sidebar-width: 250px;
+  --topbar-height: 56px;
+  --sidebar-bg: #343a40;
+  --sidebar-color: #adb5bd;
+  --sidebar-active-bg: #495057;
+  --sidebar-active-color: #fff;
+  --sidebar-hover-bg: #495057;
+  --sidebar-hover-color: #fff;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+#sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+  position: fixed;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-color);
+  transition: all 0.3s;
+  z-index: 1000;
+  top: 0;
+}
+
+#sidebar.hidden {
+  margin-right: calc(-1 * var(--sidebar-width));
+}
+
+.sidebar-header {
+  padding: 20px;
+  background: var(--sidebar-active-bg);
+}
+
+.sidebar-components {
+  padding: 20px 0;
+  overflow-y: auto;
+  height: calc(100vh - var(--topbar-height));
+}
+
+#sidebar ul.components {
+  padding: 0;
+}
+
+#sidebar ul li a {
+  padding: 10px 20px;
+  display: block;
+  color: var(--sidebar-color);
+  text-decoration: none;
+}
+
+#sidebar ul li a:hover {
+  background: var(--sidebar-hover-bg);
+  color: var(--sidebar-hover-color);
+}
+
+#sidebar ul li.active > a {
+  background: var(--sidebar-active-bg);
+  color: var(--sidebar-active-color);
+}
+
+#sidebar ul ul a {
+  padding-right: 30px;
+  font-size: 0.9em;
+}
+
+#content {
+  width: calc(100% - var(--sidebar-width));
+  min-height: calc(100vh - var(--topbar-height));
+  margin-right: var(--sidebar-width);
+  padding: 20px;
+  transition: all 0.3s;
+  margin-top: calc(var(--topbar-height) + 5px);
+}
+
+#content.full-width {
+  width: 100%;
+  margin-right: 0;
+}
+
+#topbar {
+  height: var(--topbar-height);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: var(--sidebar-width);
+  z-index: 999;
+  transition: all 0.3s;
+}
+
+#topbar.full-width {
+  right: 0;
+}
+
+@media (max-width: 768px) {
+  #sidebar {
+    margin-right: calc(-1 * var(--sidebar-width));
+  }
+
+  #sidebar.active {
+    margin-right: 0;
+  }
+
+  #content {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  #content.active {
+    margin-right: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+  }
+
+  #topbar {
+    right: 0;
+  }
+
+  #topbar.active {
+    right: var(--sidebar-width);
+  }
+}
+
+.card-counter {
+  box-shadow: 2px 2px 10px #dadada;
+  margin: 5px;
+  padding: 20px 10px;
+  background-color: #fff;
+  height: 100px;
+  border-radius: 5px;
+  transition: 0.3s linear all;
+}
+
+.card-counter:hover {
+  box-shadow: 4px 4px 20px #dadada;
+  transition: 0.3s linear all;
+}
+
+.card-counter.primary {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.card-counter.danger {
+  background-color: #ef5350;
+  color: #fff;
+}
+
+.card-counter.success {
+  background-color: #66bb6a;
+  color: #fff;
+}
+
+.card-counter.info {
+  background-color: #26c6da;
+  color: #fff;
+}
+
+.card-counter i {
+  font-size: 5em;
+  opacity: 0.2;
+}
+
+.card-counter .count-numbers {
+  position: absolute;
+  right: 35px;
+  top: 20px;
+  font-size: 32px;
+  display: block;
+}
+
+.card-counter .count-name {
+  position: absolute;
+  right: 35px;
+  top: 65px;
+  font-style: italic;
+  text-transform: capitalize;
+  opacity: 0.8;
+  display: block;
+  font-size: 18px;
+}

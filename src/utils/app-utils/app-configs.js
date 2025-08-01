@@ -2,7 +2,7 @@ class AppConfigs {
   constructor() {
     this.ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 
-    this.REFERESH_TOKEN_SECRET = process.env.REFERESH_TOKEN_SECRET;
+    this.REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
   }
 }
 

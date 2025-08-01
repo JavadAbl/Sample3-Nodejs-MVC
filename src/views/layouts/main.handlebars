@@ -1,22 +1,70 @@
-<html lang="en">
+<html lang="fa" dir="rtl">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document</title>
 
+  {{!--
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous"> --}}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.rtl.min.css"
+    integrity="sha384-Xbg45MqvDIk1e563NLpGEulpX6AvL404DP+/iCgW9eFa2BqztiwTexswJo2jLMue" crossorigin="anonymous">
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
     crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+  <link rel="stylesheet" type="text/css" href="css/global.css">
+
+
 </head>
 
-<body class="container">
-  {{>navbar}}
+<body>
 
-  {{{body}}}
+  {{> sidebar}}
+  {{> navbar}}
+
+  <div id="content">
+    {{{body}}}
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Toggle sidebar----------------------------------------------------
+      document.getElementById('sidebarCollapse').addEventListener('click', function () {
+        document.getElementById('sidebar').classList.toggle('hidden');
+        document.getElementById('content').classList.toggle('full-width');
+        document.getElementById('topbar').classList.toggle('full-width');
+
+        // For mobile view
+        document.getElementById('sidebar').classList.toggle('active');
+        document.getElementById('content').classList.toggle('active');
+        document.getElementById('topbar').classList.toggle('active');
+      });
+
+
+      //Active Sidebar Link Highlight----------------------------------------
+      const currentPath = window.location.pathname;
+
+      // Select all sidebar links
+      const sidebarLinks = document.querySelectorAll('#sidebar .components li a');
+
+      sidebarLinks.forEach(link => {
+        // Check if the link's href matches the current path
+        if (link.getAttribute('href') === currentPath) {
+          // Remove active class from all links
+          sidebarLinks.forEach(item => item.parentElement.classList.remove('active'));
+          // Add active class to the current link's parent li
+          link.parentElement.classList.add('active');
+        }
+      });
+    });
+  </script>
 </body>
 
 </html>

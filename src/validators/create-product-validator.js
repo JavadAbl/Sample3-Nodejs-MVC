@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 
-export class UserValidators {
+export class CreateProductValidator {
   static get loginValidator() {
     return [body("email").notEmpty(), body("password").notEmpty()];
   }

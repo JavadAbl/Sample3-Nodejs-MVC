@@ -37,17 +37,35 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  refreshToken RefreshTokens[]
+  Factor Factor[]
 }
 
-model RefreshTokens {
-  id      Int     @id @default(autoincrement())
-  token   String
-  revoked Boolean @default(false)
-  userId  Int
+model Factor {
+  id          Int      @id @default(autoincrement())
+  name        String
+  price       Float
+  count       Int
+  image       String?
+  description String?
+  status      String   @default("pending") // pending, completed, cancelled
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  Product     Product? @relation(fields: [productId], references: [id])
+  productId   Int?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
 
-  User User @relation(fields: [userId], references: [id])
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  price       Int
+  stock       Int
+  image       String?
+  description String?
+  factors     Factor[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
