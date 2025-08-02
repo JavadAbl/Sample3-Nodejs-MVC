@@ -9,9 +9,9 @@ async function main() {
     data: users(),
   });
 
-  /*  await prisma.product.createMany({
+  await prisma.product.createMany({
     data: products(30),
-  }); */
+  });
 }
 
 main()
