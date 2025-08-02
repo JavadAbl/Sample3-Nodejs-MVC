@@ -7,10 +7,15 @@ class ProductService {
   }
 
   //-----------------------------------------------------------
-  async getAllProducts() {
-    return (await this.productRepository.findAll()).map(
+  async getAllProducts(page) {
+    return (await this.productRepository.findAll(page)).map(
       (product) => new ProductDto(product)
     );
+  }
+
+  //-----------------------------------------------------------
+  async getProductsCount() {
+    return await this.productRepository.count();
   }
 
   //-----------------------------------------------------------

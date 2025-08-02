@@ -1,5 +1,6 @@
 import { productController } from "#controllers/web/product-controller.js";
 import { authPageMiddleware } from "#middlewares/auth-page-middleware.js";
+import { paginationMiddleware } from "#middlewares/pagination-middleware.js";
 import { validateMiddleware } from "#middlewares/validate-middleware.js";
 import { CreateProductValidator } from "#validators/create-product-validator.js";
 
@@ -14,9 +15,22 @@ export const productRoutes = {
     },
 
     {
+      method: "get",
+      path: "/Page/:page",
+      middlewares: [paginationMiddleware],
+      handler: (req, res) => productController.index(req, res),
+    },
+
+    {
       method: "post",
       path: "/create",
-      middlewares: [validateMiddleware(CreateProductValidator.loginValidator)],
+      middlewares: [
+        (req, res, next) => {
+          res.locals.view = "products";
+          next();
+        },
+        validateMiddleware(CreateProductValidator.loginValidator),
+      ],
       handler: (req, res) => productController.create(req, res),
     },
   ],

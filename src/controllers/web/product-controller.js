@@ -4,14 +4,18 @@ import { productService } from "#services/product-service.js";
 class ProductController {
   //index----------------------------------------------------------
   async index(req, res) {
-    const products = await productService.getAllProducts();
-    res.render("products", { products });
+    const page = req.page || 1;
+    const products = await productService.getAllProducts(page);
+    const count = await productService.getProductsCount();
+
+    res.render("products", { products, count });
   }
 
   //create----------------------------------------------------------
   async create(req, res) {
     const productDto = new CreateProductDto(req.body);
     await productService.createProduct(productDto);
+
     res.redirect("/products");
   }
 }

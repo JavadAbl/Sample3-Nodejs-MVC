@@ -13,16 +13,19 @@ export const pageRoutes = {
       middlewares: [authPageMiddleware],
       handler: (req, res) => pageController.home(req, res),
     },
+
     {
       method: "get",
       path: "profile",
       handler: pageController.profile,
     },
+
     {
       method: "get",
       path: "login",
       handler: (req, res) => pageController.login(req, res),
     },
+
     {
       method: "post",
       path: "login",

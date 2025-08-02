@@ -25,7 +25,18 @@ export class BaseRepository {
     return this.#rep.create({ data });
   }
 
-  findAll() {
-    return this.#rep.findMany();
+  findAll(page = 1) {
+    const take = 4;
+
+    if (page) {
+      return this.#rep.findMany({
+        skip: (page - 1) * take,
+        take,
+      });
+    }
+  }
+
+  count() {
+    return this.#rep.count();
   }
 }
