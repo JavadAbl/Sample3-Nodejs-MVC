@@ -2,7 +2,7 @@ import { productController } from "#controllers/web/product-controller.js";
 import { authPageMiddleware } from "#middlewares/auth-page-middleware.js";
 import { paginationMiddleware } from "#middlewares/pagination-middleware.js";
 import { validateMiddleware } from "#middlewares/validate-middleware.js";
-import { CreateProductValidator } from "#validators/create-product-validator.js";
+import { ProductValidator } from "#validators/product-validator.js";
 
 export const productRoutes = {
   domain: "/products",
@@ -29,7 +29,7 @@ export const productRoutes = {
           res.locals.view = "products";
           next();
         },
-        validateMiddleware(CreateProductValidator.loginValidator),
+        validateMiddleware(ProductValidator.createProductValidator),
       ],
       handler: (req, res) => productController.create(req, res),
     },

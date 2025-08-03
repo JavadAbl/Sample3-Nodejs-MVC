@@ -45,6 +45,9 @@ export class Server {
       hbs.engine({
         helpers: {
           numberToLocaleString: (price) => price.toLocaleString(),
+          eq: (a, b) => a === b,
+          add: (a, b) => a + b,
+          subtract: (a, b) => a - b,
         },
       })
     );
