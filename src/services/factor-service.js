@@ -9,7 +9,14 @@ class FactorService {
   }
 
   //-----------------------------------------------------------
-  async getAllFactors(page, take) {
+  async getAllFactors() {
+    return (await this.factorRepository.findAll()).map(
+      (product) => new ProductDto(product)
+    );
+  }
+
+  //-----------------------------------------------------------
+  async getPageFactors(page, take) {
     return (await this.factorRepository.findPage({ page, take })).map(
       (product) => new ProductDto(product)
     );

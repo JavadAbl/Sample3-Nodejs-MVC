@@ -7,7 +7,13 @@ class ProductService {
   }
 
   //-----------------------------------------------------------
-  async getAllProducts(page, take) {
+  async getAllProducts() {
+    return (await this.productRepository.findAll()).map(
+      (product) => new ProductDto(product)
+    );
+  }
+  //-----------------------------------------------------------
+  async getPageProducts(page, take) {
     return (await this.productRepository.findPage({ page, take })).map(
       (product) => new ProductDto(product)
     );

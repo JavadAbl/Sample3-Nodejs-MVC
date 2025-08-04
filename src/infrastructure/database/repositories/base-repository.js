@@ -25,7 +25,7 @@ export class BaseRepository {
     return this.#rep.create({ data });
   }
 
-  findPage({ page = 1, take = 10, ids }) {
+  findPage({ page = 1, take = 10, ids } = {}) {
     const query = {
       skip: (page - 1) * take,
       take,
@@ -43,7 +43,7 @@ export class BaseRepository {
     return this.#rep.findMany(query);
   }
 
-  findAll({ ids }) {
+  findAll({ ids } = {}) {
     const query = {
       orderBy: { id: "desc" },
     };

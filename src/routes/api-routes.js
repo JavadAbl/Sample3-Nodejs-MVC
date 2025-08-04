@@ -1,4 +1,4 @@
-import { apiController } from "#controllers/api/factor-api-controller.js";
+import { apiController } from "#controllers/api/api-controller.js";
 import { authMiddleware } from "#middlewares/auth-middleware.js";
 
 export const routes = {
@@ -7,7 +7,7 @@ export const routes = {
   routes: [
     {
       method: "get",
-      path: "/",
+      path: "GetAllProducts",
       handler: (req, res) => apiController.getAllProducts(req, res),
     },
   ],

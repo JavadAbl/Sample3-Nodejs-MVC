@@ -9,7 +9,7 @@ class FactorController {
     const pageSize = 10;
 
     const [factors, count] = await Promise.all([
-      factorService.getAllFactors(page, pageSize),
+      factorService.getPageFactors(page, pageSize),
       factorService.getFactorsCount(),
     ]);
 
@@ -25,6 +25,9 @@ class FactorController {
 
   //create----------------------------------------------------------
   async create(req, res) {
+    console.log(res.body);
+    console.log(21312321);
+
     const factorDto = new CreateFactorDto(req.body);
     await factorService.createFactor(factorDto);
 

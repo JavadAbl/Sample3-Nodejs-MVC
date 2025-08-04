@@ -1,48 +1,23 @@
-<form action="/products/create" method="post" class="p-2 border rounded-3 shadow-sm mt-2">
+<form action="/factors/create" method="post" class="p-2 border rounded-3 shadow-sm mt-2">
     <div class="row mb-4 g-2">
-        <!-- Line 1 -->
+
         <div class="col-12">
-            <div class="form-floating">
-                <input type="text" class="form-control" id="name" name="name" placeholder=" " required>
-                <label for="name" class="text-muted">
-                    <i class="bi bi-tag-fill me-2 text-secondary"></i>نام محصول
-                </label>
+            <div class="d-flex justify-content-between mb-2">
+                <label for="" class="form-label">محصولات</label>
+                <button id="btn-add" type="button" class="btn btn-secondary btn-sm">
+                    افزودن محصول
+                </button>
             </div>
+
+            <select class="form-select form-select-sm" name="products" id="products">
+            </select>
         </div>
 
 
-
-
-        <!-- Line 2 -->
-        <div class="col-6">
-            <div class="form-floating">
-                <input type="number" class="form-control" id="price" name="price" placeholder=" " required>
-                <label for="price" class="text-muted">
-                    <i class="bi bi-currency-dollar me-2 text-secondary"></i>قیمت
-                </label>
-            </div>
-        </div>
-
-
-        <div class="col-6">
-            <div class="form-floating">
-                <input type="number" class="form-control" id="stock" name="stock" placeholder=" " required>
-                <label for="stock" class="text-muted">
-                    <i class="bi bi-box2-fill me-2 text-secondary"></i>تعداد موجود
-                </label>
-            </div>
-        </div>
-
-
-        <div class="col-12 ">
-            <label for="image" class="text-muted mb-2">
-                <i class="bi bi-image-fill me-2 text-secondary"></i>عکس
-            </label>
-
-            <input type="file" class="form-control" accept="image/*" multiple="false" id="image" name="image">
+        <div id="selectedProducts" class="col-12 overflow-y-auto overflow-x-hidden"
+            style="max-height: 170px; height: 170px;">
 
         </div>
-
 
 
         <!-- Line 3 - Description -->
@@ -50,19 +25,21 @@
             <label for="description" class="form-label text-muted">
                 <i class="bi bi-card-text me-2 text-secondary"></i>توضیحات
             </label>
+
             <textarea class="form-control" id="description" name="description" rows="4"
-                style="min-height: 100px;"></textarea>
-            <div class="form-text">توضیحات جزئیات محصول</div>
+                style="min-height: 80px;"></textarea>
+
+            <div class="form-text">
+                <span>مجموع فاکتور: </span>
+                <span id="sum"></span>
+            </div>
         </div>
 
     </div>
 
     <div class="d-flex justify-content-between mt-4">
-        <button type="reset" class="btn btn-outline-secondary px-4">
-            <i class="bi bi-eraser me-2"></i>Clear
-        </button>
-        <button type="submit" class="btn btn-primary px-4">
-            <i class="bi bi-save me-2"></i>Create Product
+        <button type="submit" class="btn btn-primary btn-sm px-4">
+            <i class="bi bi-save me-2"></i>ایجاد فاکتور
         </button>
     </div>
 </form>
@@ -70,7 +47,82 @@
 
 
 <script>
-    const getProducts = async () => {
-        await fetch("api/GetAllProduc")
+    const getProducts = () => {
+        fetch("api/GetAllProducts")
+            .then(response => response.json())
+            .then(data => {
+                const selectElement = document.getElementById('products');
+
+                selectElement.innerHTML = '';
+
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = '-- انتخاب کنید --';
+                selectElement.appendChild(defaultOption);
+
+                data.forEach(product => {
+                    const option = document.createElement('option');
+                    option.value = product.id;
+                    option.textContent = `${product.name} - ${product.price.toLocaleString()} ریال`;
+                    selectElement.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching products:', error));
+    };
+
+    const getProductListCurrentValue = () => {
+        const selectElement = document.getElementById('products');
+        const currentValue = selectElement.value;
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        getProducts();
+
+        const btnAdd = document.getElementById('btn-add');
+        btnAdd.addEventListener('click', () => {
+            const selectElement = document.getElementById('products');
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+
+            if (selectedOption.value) {
+                const productName = selectedOption.textContent;
+                const productId = selectedOption.value;
+
+                // Create a new row for the selected product
+                const row = document.getElementById("selectedProducts").appendChild(document.createElement('div'));
+
+                row.className = 'row mb-2';
+                row.innerHTML = `
+                    <div class="col-8">
+                        <input type="text" class="form-control" value="${productName}" readonly>
+                    </div>
+                    <div class="col-4">
+                        <input type="hidden" name="products" value="${productId}">
+                        <button id="del${productId}" type="button" class="btn btn-danger btn-sm remove-product">
+                            <i class="bi bi-trash"></i> حذف
+                        </button>
+                    </div>
+                `;
+                // Add the product price to the sum
+                const price = parseFloat(productName.split('-')[1].trim().replace(/,/g, ''));
+                const sumElement = document.getElementById('sum');
+                const currentSum = parseFloat(sumElement.textContent.replace(/,/g, '')) || 0;
+                const newSum = currentSum + price;
+                sumElement.textContent = newSum.toLocaleString();
+
+                // Add event listener to the delete button
+                const deleteButton = row.querySelector('.remove-product');
+                deleteButton.addEventListener('click', () => {
+                    row.remove();
+
+                    const sumElement = document.getElementById('sum');
+                    const currentSum = parseFloat(sumElement.textContent.replace(/,/g, '')) || 0;
+                    const price = parseFloat(productName.split('-')[1].trim().replace(/,/g, ''));
+                    const newSum = currentSum - price;
+                    sumElement.textContent = newSum.toLocaleString();
+                });
+
+                selectElement.value = '';
+            }
+        });
+    });
 </script>

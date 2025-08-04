@@ -9,7 +9,7 @@ class ProductController {
     const pageSize = 4;
 
     const [products, count] = await Promise.all([
-      productService.getAllProducts(page, pageSize),
+      productService.getPageProducts(page, pageSize),
       productService.getProductsCount(),
     ]);
 

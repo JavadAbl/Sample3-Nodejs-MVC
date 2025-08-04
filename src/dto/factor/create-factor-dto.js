@@ -1,7 +1,6 @@
 export class CreateFactorDto {
-  constructor({ count, status, description, products }) {
+  constructor({ count, description, products }) {
     this.count = count;
-    this.status = status;
     this.description = description;
     this.products = products;
   }
