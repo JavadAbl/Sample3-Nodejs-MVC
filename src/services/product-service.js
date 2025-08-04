@@ -7,8 +7,8 @@ class ProductService {
   }
 
   //-----------------------------------------------------------
-  async getAllProducts(page) {
-    return (await this.productRepository.findAll(page)).map(
+  async getAllProducts(page, take) {
+    return (await this.productRepository.findPage({ page, take })).map(
       (product) => new ProductDto(product)
     );
   }
@@ -25,18 +25,7 @@ class ProductService {
 
   //-----------------------------------------------------------
   async createProduct(productDto) {
-    const newProduct = {
-      name: productDto.name,
-      price: productDto.price,
-      discount: productDto.discount,
-      finalPrice:
-        productDto.price - productDto.price * (productDto.discount / 100),
-      stock: productDto.stock,
-      image: productDto.image || null,
-      description: productDto.description || null,
-    };
-
-    return await this.productRepository.create(newProduct);
+    return await this.productRepository.create(productDto);
   }
 }
 

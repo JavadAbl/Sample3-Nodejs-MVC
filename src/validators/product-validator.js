@@ -5,7 +5,7 @@ export class ProductValidator {
     return [
       body("name").notEmpty(),
       body("price").notEmpty().toInt(),
-      body("stock").notEmpty(),
+      body("stock").notEmpty().toInt(),
     ];
   }
 }

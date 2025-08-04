@@ -1,4 +1,16 @@
-import { factorRoutes } from "./api/factor-routes.js";
-import { userRoutes } from "./api/user-routes.js";
+import { apiController } from "#controllers/api/factor-api-controller.js";
+import { authMiddleware } from "#middlewares/auth-middleware.js";
 
-export const apiRoutes = [userRoutes, factorRoutes];
+export const routes = {
+  domain: "/",
+  middlewares: [authMiddleware],
+  routes: [
+    {
+      method: "get",
+      path: "/",
+      handler: (req, res) => apiController.getAllProducts(req, res),
+    },
+  ],
+};
+
+export const apiRoutes = [routes];

@@ -1,0 +1,145 @@
+<div class="container mt-2">
+    <h1 class="text-center mb-4 h2">فاکتورها</h1>
+
+    <!-- Search Bar -->
+    <div class="row search-bar">
+        <div class="col-7 col-md-6 offset-md-0">
+            <div class="input-group">
+                <input type="text" class="form-control form-control-sm" placeholder="Search for products..."
+                    aria-label="Search">
+
+                <div class="input-group-append">
+                    <button class="btn btn-primary btn-sm" type="button">Search</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-3 col-md-6">
+            <button type="button" class="btn btn-success float-end btn-sm" data-bs-toggle="modal"
+                data-bs-target="#modalId">
+                افزودن فاکتور جدید
+                <i class="bi bi-plus-circle"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade animate__animated animate__slideInUp animate__faster" id="modalId" tabindex="-1"
+        role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitleId">
+                        افزودن فاکتور
+                    </h5>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                </div>
+
+                <div class="modal-body p-0 ">
+                    <div class="container-fluid">{{> factors/add-factor}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var modalId = document.getElementById('modalId');
+
+        modalId.addEventListener('show.bs.modal', function (event) {
+            // Button that triggered the modal
+            let button = event.relatedTarget;
+            // Extract info from data-bs-* attributes
+            let recipient = button.getAttribute('data-bs-whatever');
+
+            // Use above variables to manipulate the DOM
+        });
+    </script>
+
+
+    <!-- Modal Body -->
+    <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+    <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
+        aria-labelledby="modalTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitleId">
+                        Modal title
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">Body</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional: Place to the bottom of scripts -->
+    <script>
+        const myModal = new bootstrap.Modal(
+            document.getElementById("modalId"),
+            options,
+        );
+    </script>
+
+
+    <!-- Modal Body -->
+    <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+    <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
+        aria-labelledby="modalTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitleId">
+                        Modal title
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">Body</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional: Place to the bottom of scripts -->
+    <script>
+        const myModal = new bootstrap.Modal(
+            document.getElementById("modalId"),
+            options,
+        );
+    </script>
+
+
+    <hr>
+
+    <!-- Product Grid -->
+    <div class=" row">
+        {{#if products.length}}
+        {{#each products}}
+        {{> products/product-card this}}
+        {{/each}}
+
+        {{> pagination}} {{else}} <div class="d-flex justify-content-center align-items-center" style="height: 200px;">
+            <div class="text-center text-muted">
+                <i class="bi bi-exclamation-circle fs-1"></i>
+                <p class="mt-2 mb-0 fs-5 fw-light text-decoration-underline">
+                    فاکتوری ثبت نشده است
+                </p>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+
+
+</div>

@@ -1,21 +1,23 @@
-import { userRepository } from "#infrastructure/database/repositories/user-repository.js";
+import { appConfigs } from "#utils/app-utils/app-configs.js";
+import { appConstants } from "#utils/app-utils/app-constants.js";
+import { TokenGenerator } from "#utils/auth-utils/token-generator.js";
 import { AppError } from "#utils/error-utils/app-error.js";
 import jwt from "jsonwebtoken";
 
 export async function authMiddleware(req, res, next) {
-  const token = req.headers["authorization"]?.split(" ")[1];
+  const accessToken = req.cookies.accessToken;
+  const refreshToken = req.cookies.refreshToken;
 
-  if (!token)
-    return next(new AppError("No token provided, authorization denied", 401));
+  try {
+    const tokenPayload = jwt.verify(
+      accessToken,
+      appConfigs.ACCESS_TOKEN_SECRET
+    );
 
-  jwt.verify(token, "secret", async (err, decoded) => {
-    if (err)
-      return next(
-        new AppError("Invalid token provided, authorization denied", 401)
-      );
-
-    const user = await userRepository.findUnique("id", decoded.id);
-    if (!user)
+    req.user = tokenPayload.user;
+    return next();
+  } catch (err) {
+    if (!refreshToken)
       return next(
         new AppError(
           "there is no user attached to the token, authorization denied",
@@ -23,8 +25,28 @@ export async function authMiddleware(req, res, next) {
         )
       );
 
-    req.user = user;
+    try {
+      const tokenPayload = jwt.verify(
+        refreshToken,
+        appConfigs.REFRESH_TOKEN_SECRET
+      );
+      const newAccessToken = await TokenGenerator.generateAccessToken(
+        tokenPayload.user
+      );
 
-    next();
-  });
+      res.cookie("accessToken", newAccessToken, {
+        httpOnly: true,
+        expires: appConstants.ACCESS_TOKEN_EXPIRE,
+      });
+      req.user = tokenPayload.user;
+      return next();
+    } catch (e) {
+      return next(
+        new AppError(
+          "there is no user attached to the token, authorization denied",
+          401
+        )
+      );
+    }
+  }
 }

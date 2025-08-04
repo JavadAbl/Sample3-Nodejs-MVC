@@ -1,19 +1,19 @@
 import { CreateProductDto } from "#dto/product/create-product-dto.js";
 import { productService } from "#services/product-service.js";
-import { appConstants } from "#utils/app-utils/app-constants.js";
 import { generatePagination } from "#utils/app-utils/app-utils.js";
 
 class ProductController {
   //index----------------------------------------------------------
   async index(req, res) {
     const page = req.page || 1;
+    const pageSize = 4;
 
     const [products, count] = await Promise.all([
-      productService.getAllProducts(page),
+      productService.getAllProducts(page, pageSize),
       productService.getProductsCount(),
     ]);
 
-    const totalPages = Math.ceil(count / appConstants.PAGE_SIZE);
+    const totalPages = Math.ceil(count / pageSize);
 
     res.render("products", {
       products,

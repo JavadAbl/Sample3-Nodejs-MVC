@@ -28,6 +28,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//User----------------------------------------------------------
 model User {
   id       Int     @id @default(autoincrement())
   email    String  @unique
@@ -40,23 +41,25 @@ model User {
   Factor Factor[]
 }
 
+//Factor----------------------------------------------------------
 model Factor {
-  id          Int      @id @default(autoincrement())
-  name        String
-  price       Float
-  count       Int
-  image       String?
-  description String?
-  status      String   @default("pending") // pending, completed, cancelled
-  userId      Int
-  user        User     @relation(fields: [userId], references: [id])
-  Product     Product? @relation(fields: [productId], references: [id])
-  productId   Int?
+  id             Int       @id @default(autoincrement())
+  price          Float
+  count          Int
+  description    String?
+  status         String    @default("pending")
+  createDateTime DateTime  @default(now())
+  submitDateTime DateTime?
+
+  userId   Int
+  user     User      @relation(fields: [userId], references: [id])
+  products Product[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+//Product----------------------------------------------------------
 model Product {
   id          Int      @id @default(autoincrement())
   name        String
