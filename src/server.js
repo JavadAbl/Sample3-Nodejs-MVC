@@ -37,6 +37,7 @@ export class Server {
 
   #setupErrorHandlers() {
     this.#app.use(errorMiddleware);
+    // this.#app.get("",(req,res)=>res.stat)
   }
 
   #setupViewEngine() {
@@ -48,6 +49,7 @@ export class Server {
           eq: (a, b) => a === b,
           add: (a, b) => a + b,
           subtract: (a, b) => a - b,
+          toDateString: (date) => date?.toLocaleString("fa-IR"),
         },
       })
     );

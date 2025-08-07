@@ -1,5 +1,6 @@
 export class UserDto {
-  constructor({ email, name, createdAt, updatedAt }) {
+  constructor({ id, email, name, createdAt, updatedAt }) {
+    this.id = id;
     this.email = email;
     this.name = name;
     this.createdAt = createdAt;

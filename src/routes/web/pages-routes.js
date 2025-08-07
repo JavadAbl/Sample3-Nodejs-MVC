@@ -5,7 +5,7 @@ import { UserValidator } from "#validators/user-validator.js";
 
 export const pageRoutes = {
   domain: "/",
-
+  groupMiddlewares: [],
   routes: [
     {
       method: "get",

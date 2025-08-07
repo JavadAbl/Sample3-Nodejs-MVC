@@ -44,8 +44,7 @@ model User {
 //Factor----------------------------------------------------------
 model Factor {
   id             Int       @id @default(autoincrement())
-  price          Float
-  count          Int
+  price          Int
   description    String?
   status         String    @default("pending")
   createDateTime DateTime  @default(now())

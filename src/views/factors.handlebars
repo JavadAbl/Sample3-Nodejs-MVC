@@ -43,92 +43,36 @@
         </div>
     </div>
 
-    <script>
-        var modalId = document.getElementById('modalId');
-
-        modalId.addEventListener('show.bs.modal', function (event) {
-            // Button that triggered the modal
-            let button = event.relatedTarget;
-            // Extract info from data-bs-* attributes
-            let recipient = button.getAttribute('data-bs-whatever');
-
-            // Use above variables to manipulate the DOM
-        });
-    </script>
-
-
-    <!-- Modal Body -->
-    <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
-    <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
-        aria-labelledby="modalTitleId" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitleId">
-                        Modal title
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">Body</div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="button" class="btn btn-primary">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Optional: Place to the bottom of scripts -->
-    <script>
-        const myModal = new bootstrap.Modal(
-            document.getElementById("modalId"),
-            options,
-        );
-    </script>
-
-
-    <!-- Modal Body -->
-    <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
-    <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
-        aria-labelledby="modalTitleId" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitleId">
-                        Modal title
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">Body</div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="button" class="btn btn-primary">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Optional: Place to the bottom of scripts -->
-    <script>
-        const myModal = new bootstrap.Modal(
-            document.getElementById("modalId"),
-            options,
-        );
-    </script>
 
 
     <hr>
 
     <!-- Product Grid -->
     <div class=" row">
-        {{#if products.length}}
-        {{#each products}}
-        {{> products/product-card this}}
-        {{/each}}
+        <div class="table-responsive">
+            {{#if factors.length}}
+            {{#each factors}}
+            <table class="table  table-hover table-sm table-light align-top ">
+                <thead class="table-primary">
+                    <tr>
+                        <th scope="col">شماره فاکتور</th>
+                        <th scope="col">تاریخ ایجاد</th>
+                        <th scope="col">تاریخ تایید</th>
+                        <th scope="col">قیمت کل</th>
+                        <th scope="col">وضعیت</th>
+                        <th scope="col">توضیحات</th>
+                        <th scope="col" class="text-center">نمایش</th>
+                        <th scope="col" class="text-center">تایید</th>
+                        <th scope="col" class="text-center">لغو</th>
+                        <th scope="col" class="text-center"></th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider table-light">
+                    {{> factors/factor-row this}}
+                </tbody>
+            </table>
+            {{/each}}
+        </div>
 
         {{> pagination}} {{else}} <div class="d-flex justify-content-center align-items-center" style="height: 200px;">
             <div class="text-center text-muted">

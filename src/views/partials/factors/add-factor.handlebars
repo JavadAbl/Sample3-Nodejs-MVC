@@ -1,4 +1,4 @@
-<form action="/factors/create" method="post" class="p-2 border rounded-3 shadow-sm mt-2">
+<form id="factor-form" action="/factors/create" method="post" class="p-2 border rounded-3 shadow-sm mt-2">
     <div class="row mb-4 g-2">
 
         <div class="col-12">
@@ -9,25 +9,23 @@
                 </button>
             </div>
 
-            <select class="form-select form-select-sm" name="products" id="products">
+            <select class="form-select form-select-sm select" {{!-- name="products" --}}id="products">
             </select>
-        </div>
 
+
+        </div>
 
         <div id="selectedProducts" class="col-12 overflow-y-auto overflow-x-hidden"
             style="max-height: 170px; height: 170px;">
 
         </div>
 
-
         <!-- Line 3 - Description -->
         <div class="mb-4">
             <label for="description" class="form-label text-muted">
                 <i class="bi bi-card-text me-2 text-secondary"></i>توضیحات
             </label>
-
-            <textarea class="form-control" id="description" name="description" rows="4"
-                style="min-height: 80px;"></textarea>
+            <textarea class="form-control" id="description" rows="4" style="min-height: 80px;"></textarea>
 
             <div class="form-text">
                 <span>مجموع فاکتور: </span>
@@ -70,15 +68,79 @@
             .catch(error => console.error('Error fetching products:', error));
     };
 
-    const getProductListCurrentValue = () => {
-        const selectElement = document.getElementById('products');
-        const currentValue = selectElement.value;
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
-        getProducts();
-
         const btnAdd = document.getElementById('btn-add');
+        const payload = {
+            products: [],
+            description: ""
+        }
+        const factorForm = document.getElementById('factor-form');
+        factorForm.reset(); // Reset the form to clear any previous data
+        //   factorForm.addEventListener('reset', () => {
+        payload.products = [];
+        payload.description = "";
+        document.getElementById('sum').textContent = '';
+        document.getElementById('selectedProducts').innerHTML = '';
+        getProducts();
+        // });
+
+
+        factorForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent the default form submission
+
+            if (payload.products.length === 0) {
+                alert('لطفاً حداقل یک محصول انتخاب کنید.');
+                return;
+            }
+            if (payload.description.trim() === '') {
+                alert('لطفاً توضیحات را وارد کنید.');
+                return;
+            }
+
+            fetch('api/factors/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            }).then((res) => {
+                if (res.ok)
+                    window.location.href = "/factors"
+                else
+                    alert('خطا در ارسال فاکتور. لطفاً دوباره تلاش کنید.');
+            }).catch((error) => {
+                alert('خطا در ارسال فاکتور. لطفاً دوباره تلاش کنید.');
+            });
+
+        });
+
+        const descriptionInput = document.getElementById('description');
+        descriptionInput.addEventListener('input', () => {
+            payload.description = descriptionInput.value;
+        });
+
+
+        function updateSum() {
+            let sum = 0;
+            payload.products.forEach(product => {
+                // Extract price from product name (assumes format: "name - price ریال")
+                const priceMatch = product.name.match(/- ([\d,]+) ریال/);
+                if (priceMatch) {
+                    const price = parseInt(priceMatch[1].replace(/,/g, ''));
+                    // Always sync count from input field
+                    const countInput = document.getElementById(`count${product.id}`);
+                    if (countInput) {
+                        product.count = parseInt(countInput.value) || 1;
+                    }
+                    sum += price * product.count;
+                }
+            });
+            document.getElementById('sum').textContent = sum.toLocaleString() + ' ریال';
+
+
+
+        }
+
         btnAdd.addEventListener('click', () => {
             const selectElement = document.getElementById('products');
             const selectedOption = selectElement.options[selectElement.selectedIndex];
@@ -87,41 +149,76 @@
                 const productName = selectedOption.textContent;
                 const productId = selectedOption.value;
 
-                // Create a new row for the selected product
-                const row = document.getElementById("selectedProducts").appendChild(document.createElement('div'));
+                const existingProduct = payload.products.find(product => product.id === productId);
+                if (existingProduct) {
+                    console.log(existingProduct.count);
+                    // If the product already exists, just update the count
+                    const countInput = document.getElementById(`count${productId}`);
+                    console.log(countInput);
+                    countInput.value = parseInt(countInput.value) + 1;
+                    updateSum();
+                    existingProduct.count = parseInt(countInput.value);
+                    selectElement.value = '';
+                    return;
+                }
+                else {
 
-                row.className = 'row mb-2';
-                row.innerHTML = `
-                    <div class="col-8">
+                    // Create a new row for the selected product
+                    const row = document.getElementById("selectedProducts").appendChild(document.createElement('div'));
+
+                    row.className = 'row mb-2 align-items-center';
+                    row.innerHTML = `
+                    <div class="col-6">
                         <input type="text" class="form-control" value="${productName}" readonly>
                     </div>
-                    <div class="col-4">
-                        <input type="hidden" name="products" value="${productId}">
+
+                    <div class="col-3">
+                        <input id="count${productId}"  type="number" class="form-control" min="1" value=1 style="width: 80px;" ">
+                    </div>
+
+                    <div class="col-3">
+                        <input type="hidden" value="${productId}">
                         <button id="del${productId}" type="button" class="btn btn-danger btn-sm remove-product">
                             <i class="bi bi-trash"></i> حذف
                         </button>
                     </div>
                 `;
-                // Add the product price to the sum
-                const price = parseFloat(productName.split('-')[1].trim().replace(/,/g, ''));
-                const sumElement = document.getElementById('sum');
-                const currentSum = parseFloat(sumElement.textContent.replace(/,/g, '')) || 0;
-                const newSum = currentSum + price;
-                sumElement.textContent = newSum.toLocaleString();
 
-                // Add event listener to the delete button
-                const deleteButton = row.querySelector('.remove-product');
-                deleteButton.addEventListener('click', () => {
-                    row.remove();
+                    const btnDelete = document.getElementById(`del${productId}`);
+                    btnDelete.addEventListener('click', () => {
+                        row.remove();
+                        const index = payload.products.findIndex(p => p.id === productId);
+                        if (index !== -1) {
+                            payload.products.splice(index, 1);
+                            updateSum();
+                        }
+                    });
 
-                    const sumElement = document.getElementById('sum');
-                    const currentSum = parseFloat(sumElement.textContent.replace(/,/g, '')) || 0;
-                    const price = parseFloat(productName.split('-')[1].trim().replace(/,/g, ''));
-                    const newSum = currentSum - price;
-                    sumElement.textContent = newSum.toLocaleString();
-                });
+                    const countInput = document.getElementById(`count${productId}`);
+                    countInput.addEventListener('change', () => {
+                        const newCount = parseInt(countInput.value);
+                        if (newCount < 1 || isNaN(newCount)) {
+                            countInput.value = 1;
+                            return;
+                        }
+                        const product = payload.products.find(p => p.id === productId);
+                        if (product) {
+                            product.count = newCount;
+                            updateSum();
+                        }
+                    });
 
-                selectElement.value = '';
+                    payload.products.push({
+                        id: productId,
+                        count: 1,
+                        name: productName
+                    });
+                    updateSum();
+
+
+
+                    selectElement.value = '';
+                }
             }
         });
     });

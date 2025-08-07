@@ -1,0 +1,19 @@
+<table class="table table-striped table-bordered table-hover">
+    <thead class="bg-primary text-white">
+        <tr>
+            <th scope="col">شماره محصول</th>
+            <th scope="col">نام محصول</th>
+            <th scope="col">قیمت</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each products}}
+        <tr>
+            <td>{{id}}</td>
+            <td>{{name}}</td>
+            <td>{{numberToLocaleString price}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+
+</table>

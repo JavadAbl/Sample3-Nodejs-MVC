@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { appConfigs } from "#utils/app-utils/app-configs.js";
 import { appConstants } from "#utils/app-utils/app-constants.js";
 import { TokenGenerator } from "#utils/auth-utils/token-generator.js";
@@ -38,6 +39,7 @@ export async function authMiddleware(req, res, next) {
         httpOnly: true,
         expires: appConstants.ACCESS_TOKEN_EXPIRE,
       });
+
       req.user = tokenPayload.user;
       return next();
     } catch (e) {

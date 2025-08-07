@@ -1,4 +1,3 @@
-import { CreateFactorDto } from "#dto/factor/create-factor-dto.js";
 import { factorService } from "#services/factor-service.js";
 import { generatePagination } from "#utils/app-utils/app-utils.js";
 
@@ -21,17 +20,6 @@ class FactorController {
       totalPages,
       pagination: generatePagination(page, totalPages),
     });
-  }
-
-  //create----------------------------------------------------------
-  async create(req, res) {
-    console.log(res.body);
-    console.log(21312321);
-
-    const factorDto = new CreateFactorDto(req.body);
-    await factorService.createFactor(factorDto);
-
-    res.redirect("/factors");
   }
 }
 

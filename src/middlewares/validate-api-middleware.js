@@ -1,6 +1,6 @@
 import { validationResult } from "express-validator";
 
-export function validateMiddleware(validators) {
+export function validateAPIMiddleware(validators) {
   return async (req, res, next) => {
     await Promise.all(validators.map((validator) => validator.run(req)));
 
@@ -12,9 +12,8 @@ export function validateMiddleware(validators) {
         errorMessages += error.msg;
       }
 
-      return res.status(400).render(res.locals.view, {
+      return res.statusCode(400).json({
         error: errorMessages,
-        oldInput: req.body,
       });
     }
 

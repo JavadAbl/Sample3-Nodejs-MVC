@@ -1,4 +1,4 @@
-import { ProductDto } from "#dto/product/product-dto.js";
+import { FactorDto } from "#dto/factor/factor-dto.js";
 import { factorRepository } from "#infrastructure/database/repositories/factor-repository.js";
 import { productRepository } from "#infrastructure/database/repositories/product-repository.js";
 
@@ -11,15 +11,19 @@ class FactorService {
   //-----------------------------------------------------------
   async getAllFactors() {
     return (await this.factorRepository.findAll()).map(
-      (product) => new ProductDto(product)
+      (product) => new FactorDto(product)
     );
   }
 
   //-----------------------------------------------------------
   async getPageFactors(page, take) {
-    return (await this.factorRepository.findPage({ page, take })).map(
-      (product) => new ProductDto(product)
-    );
+    return (
+      await this.factorRepository.findPage({
+        page,
+        take,
+        includes: ["products"],
+      })
+    ).map((product) => new FactorDto(product));
   }
 
   //-----------------------------------------------------------
@@ -33,22 +37,23 @@ class FactorService {
   }
 
   //-----------------------------------------------------------
-  async createFactor(factorDto) {
-    const products = productRepository.findAll({ ids: factorDto.products });
+  async createFactor(factorDto, user) {
+    const products = await productRepository.findAll({
+      ids: factorDto.products.map((p) => p.id),
+    });
     let price = 0;
 
-    products.forEach((p) => {
-      price += p.price * factorDto.count;
+    factorDto.products.forEach((p) => {
+      price += products.find((product) => product.id === p.id).price * p.count;
     });
 
     const createFactorData = {
-      price,
-      count: factorDto.count,
-      status: factorDto.status,
+      price: price,
       description: factorDto.description,
-
-      Product: { connect: factorDto.products },
+      products: { connect: factorDto.products.map((p) => ({ id: p.id })) },
+      userId: user.id,
     };
+
     return await this.factorRepository.create(createFactorData);
   }
 }

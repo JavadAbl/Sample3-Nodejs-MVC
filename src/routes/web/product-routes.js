@@ -6,7 +6,7 @@ import { ProductValidator } from "#validators/product-validator.js";
 
 export const productRoutes = {
   domain: "/products",
-  middlewares: [authPageMiddleware],
+  groupMiddlewares: [authPageMiddleware],
   routes: [
     {
       method: "get",

@@ -2,7 +2,6 @@ export class FactorDto {
   constructor({
     id,
     price,
-    count,
     status,
     description,
     createDateTime,
@@ -12,7 +11,6 @@ export class FactorDto {
   }) {
     this.id = id;
     this.price = price;
-    this.count = count;
     this.status = status;
     this.description = description;
     this.createDateTime = createDateTime;
