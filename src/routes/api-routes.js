@@ -12,6 +12,7 @@ export const routes = {
       path: "GetAllProducts",
       handler: (req, res) => apiController.getAllProducts(req, res),
     },
+
     {
       method: "post",
       path: "Factors/Create",
@@ -19,6 +20,13 @@ export const routes = {
         validateAPIMiddleware(FactorValidator.createFactorValidator),
       ],
       handler: (req, res) => apiController.createFactor(req, res),
+    },
+
+    {
+      method: "put",
+      path: "Factors/Submit/:id",
+      middlewares: [],
+      handler: (req, res) => apiController.submitFactor(req, res),
     },
   ],
 };

@@ -56,6 +56,11 @@ class FactorService {
 
     return await this.factorRepository.create(createFactorData);
   }
+
+  //-----------------------------------------------------------
+  async submitFactor(id) {
+    return await this.factorRepository.findOne("id", id);
+  }
 }
 
 export const factorService = new FactorService(

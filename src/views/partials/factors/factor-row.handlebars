@@ -11,7 +11,7 @@
     </td>
 
     <td>{{numberToLocaleString price}}</td>
-    <td>{{status}}</td>
+    <td>{{statusTitle}}</td>
     <td class="col-3">{{description}}</td>
 
     <td class="text-center">
@@ -19,13 +19,17 @@
             <i class="bi bi-search"></i> <!-- Changed to Search Icon -->
         </button>
     </td>
+
     <td class="text-center">
-        <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#submitModal">
+        <button id="submitBtn{{id}}" type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
+            data-bs-target="#submitModal{{id}}">
             <i class="bi bi-save"></i> <!-- Changed to Save Icon -->
         </button>
     </td>
+
     <td class="text-center">
-        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal">
+        <button id="cancelBtn{{id}}" type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+            data-bs-target="#cancelModal{{id}}">
             <i class="bi bi-x"></i>
         </button>
     </td>
@@ -37,17 +41,16 @@
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title" id="viewModalLabel">View Details</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                    <div class="modal-header text-secondary">
+                        <h5 class="modal-title" id="viewModalLabel">فاکتور شماره {{id}}</h5>
+                        <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close">
                         </button>
                     </div>
                     <div class="modal-body">
                         {{> factors/view-factor products=this.products}}
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">بستن</button>
                     </div>
                 </div>
             </div>
@@ -60,27 +63,100 @@
 
 
 <!-- Submit Modal -->
-<div class="modal fade" id="submitModal" tabindex="-1" role="dialog" aria-labelledby="submitModalLabel"
+<div class="modal fade" id="submitModal{{id}}" tabindex="-1" role="dialog" aria-labelledby="submitModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="submitModalLabel">Submit Confirmation</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+            <div class="modal-header">
+                <h5 class="modal-title" id="submitModalLabel">تایید فاکتور</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
+
             <div class="modal-body">
-                ...
+                آیا برای تایید فاکتور شماره {{id}} مطمئن هستید؟
             </div>
+
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">بستن</button>
+
+                <button id="submitCommandBtn{{id}}" type="button" class="btn btn-primary btn-sm">تایید</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Cancel Modal -->
-<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel"
+<div class="modal fade" id="cancelModal{{id}}" tabindex="-1" role="dialog" aria-labelledby="submitModalLabel"
     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="submitModalLabel">لغو فاکتور</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+
+            <div class="modal-body">
+                آیا برای لغو فاکتور شماره {{id}} مطمئن هستید؟
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">بستن</button>
+
+                <button type="button" class="btn btn-primary btn-sm">تایید</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const cancelBtn = document.getElementById(`cancelBtn{{id}}`);
+
+        if ("{{ status }}" !== 2)
+
+            cancelBtn.disabled = true;
+        else
+            cancelBtn.disabled = false;
+
+
+        const submitBtn = document.getElementById(`submitBtn{{id}}`);
+
+        if ("{{ status }}" === 2)
+
+            submitBtn.disabled = true;
+        else
+            submitBtn.disabled = false;
+
+        //Submit Button Event
+        const submitCommandBtn = document.getElementById(`submitCommandBtn{{id}}`);
+
+
+        submitCommandBtn.addEventListener('click', () => {
+            fetch(`/api/factors/submit/{{id}}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(res => {
+                    if (res.ok) {
+                        window.location.reload();
+                    } else {
+                        alert('خطای تایید فاکتور: ');
+                    }
+                })
+                .catch(error => {
+                    alert('خطای تایید فاکتور: ');
+                    console.error('Error:', error)
+                });
+
+        });
+
+
+    });
+
+</script>

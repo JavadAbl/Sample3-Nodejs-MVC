@@ -15,6 +15,13 @@ class APIController {
     await factorService.createFactor(createFactorDto, req.user);
     return res.status(201).send();
   }
+
+  //-------------------------------------------------------------------
+  async submitFactor(req, res) {
+    console.log(req.params);
+
+    return res.status(201).send();
+  }
 }
 
 export const apiController = new APIController();

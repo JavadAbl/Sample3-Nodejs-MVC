@@ -74,4 +74,6 @@ export class BaseRepository {
   count() {
     return this.#rep.count();
   }
+
+  patch() {}
 }

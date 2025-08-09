@@ -46,7 +46,7 @@ model Factor {
   id             Int       @id @default(autoincrement())
   price          Int
   description    String?
-  status         String    @default("pending")
+  status         Int       @default(1)
   createDateTime DateTime  @default(now())
   submitDateTime DateTime?
 
