@@ -104,7 +104,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">بستن</button>
 
-                <button type="button" class="btn btn-primary btn-sm">تایید</button>
+                <button id="cancelCommandBtn{{id}}" type="button" class="btn btn-primary btn-sm">تایید</button>
             </div>
         </div>
     </div>
@@ -116,7 +116,7 @@
 
         const cancelBtn = document.getElementById(`cancelBtn{{id}}`);
 
-        if ("{{ status }}" !== 2)
+        if ("{{ status }}" == 3)
 
             cancelBtn.disabled = true;
         else
@@ -124,17 +124,13 @@
 
 
         const submitBtn = document.getElementById(`submitBtn{{id}}`);
-
-        if ("{{ status }}" === 2)
-
+        if ("{{ status }}" != 1)
             submitBtn.disabled = true;
         else
             submitBtn.disabled = false;
 
         //Submit Button Event
         const submitCommandBtn = document.getElementById(`submitCommandBtn{{id}}`);
-
-
         submitCommandBtn.addEventListener('click', () => {
             fetch(`/api/factors/submit/{{id}}`, {
                 method: 'PUT',
@@ -151,6 +147,30 @@
                 })
                 .catch(error => {
                     alert('خطای تایید فاکتور: ');
+                    console.error('Error:', error)
+                });
+
+        });
+
+
+        //Cancel Button Event
+        const cancelCommandBtn = document.getElementById(`cancelCommandBtn{{id}}`);
+        cancelCommandBtn.addEventListener('click', () => {
+            fetch(`/api/factors/cancel/{{id}}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(res => {
+                    if (res.ok) {
+                        window.location.reload();
+                    } else {
+                        alert('خطای لغو فاکتور: ');
+                    }
+                })
+                .catch(error => {
+                    alert('خطای لغو فاکتور: ');
                     console.error('Error:', error)
                 });
 

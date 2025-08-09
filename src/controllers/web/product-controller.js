@@ -5,11 +5,12 @@ import { generatePagination } from "#utils/app-utils/app-utils.js";
 class ProductController {
   //index----------------------------------------------------------
   async index(req, res) {
+    const query = req.query.q;
     const page = req.page || 1;
     const pageSize = 4;
 
     const [products, count] = await Promise.all([
-      productService.getPageProducts(page, pageSize),
+      productService.getPageProducts(page, pageSize, query),
       productService.getProductsCount(),
     ]);
 

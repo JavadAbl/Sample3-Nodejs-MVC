@@ -18,7 +18,16 @@ class APIController {
 
   //-------------------------------------------------------------------
   async submitFactor(req, res) {
-    console.log(req.params);
+    const id = req.params.id;
+    await factorService.submitFactor(Number(id));
+
+    return res.status(201).send();
+  }
+
+  //-------------------------------------------------------------------
+  async cancelFactor(req, res) {
+    const id = req.params.id;
+    await factorService.cancelFactor(Number(id));
 
     return res.status(201).send();
   }

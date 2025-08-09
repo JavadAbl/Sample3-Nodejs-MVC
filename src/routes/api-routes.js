@@ -28,6 +28,13 @@ export const routes = {
       middlewares: [],
       handler: (req, res) => apiController.submitFactor(req, res),
     },
+
+    {
+      method: "put",
+      path: "Factors/Cancel/:id",
+      middlewares: [],
+      handler: (req, res) => apiController.cancelFactor(req, res),
+    },
   ],
 };
 

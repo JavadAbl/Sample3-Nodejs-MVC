@@ -13,10 +13,16 @@ class ProductService {
     );
   }
   //-----------------------------------------------------------
-  async getPageProducts(page, take) {
-    return (await this.productRepository.findPage({ page, take })).map(
-      (product) => new ProductDto(product)
-    );
+  async getPageProducts(page, take, query) {
+    return (
+      await this.productRepository.findPage({
+        page,
+        take,
+        ...(query && {
+          where: { name: { contains: query } },
+        }),
+      })
+    ).map((product) => new ProductDto(product));
   }
 
   //-----------------------------------------------------------

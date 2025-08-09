@@ -58,8 +58,18 @@ class FactorService {
   }
 
   //-----------------------------------------------------------
-  async submitFactor(id) {
-    return await this.factorRepository.findOne("id", id);
+  submitFactor(id) {
+    return this.factorRepository.patch(id, {
+      status: 2,
+      submitDateTime: new Date(),
+    });
+  }
+
+  //-----------------------------------------------------------
+  cancelFactor(id) {
+    return this.factorRepository.patch(id, {
+      status: 3,
+    });
   }
 }
 
