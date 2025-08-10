@@ -12,7 +12,10 @@
 
     <td>{{numberToLocaleString price}}</td>
     <td>
-        <span class="badge {{#if (eq status 1)}}{{bg-warning}}{{/if}}">{{statusTitle}}</span>
+        <span class="badge {{#if (eq status 1)}}bg-warning{{/if}}
+        {{#if (eq status 2)}}bg-success{{/if}}
+        {{#if (eq status 3)}}bg-danger{{/if}}
+        ">{{statusTitle}}</span>
     </td>
     <td class="col-3">{{description}}</td>
 
@@ -177,7 +180,6 @@
                 });
 
         });
-
 
     });
 
