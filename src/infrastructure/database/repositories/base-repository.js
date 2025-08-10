@@ -27,20 +27,22 @@ export class BaseRepository {
     return this.#rep.create({ data });
   }
 
-  findPage({ page = 1, take = 10, ids, includes = [], where } = {}) {
-    const include = includes.reduce((acc, include) => {
+  find({ page, take, ids, includes, where, orderBy, select } = {}) {
+    const include = includes?.reduce((acc, include) => {
       acc[include] = true;
       return acc;
     }, {});
 
-    const query = {
-      skip: (page - 1) * take,
-      take,
-      orderBy: { id: "desc" },
-      include,
-    };
+    const query = {};
 
-    console.log(where);
+    if (page && take) {
+      query.skip = (page - 1) * take;
+      query.take = take;
+    }
+    if (orderBy) query.orderBy = orderBy;
+    else query.orderBy = { id: "desc" };
+
+    if (include) query.include = include;
 
     const whereClause = {};
     if (ids && ids.length > 0) {
@@ -48,22 +50,10 @@ export class BaseRepository {
     }
     if (where) {
       Object.assign(whereClause, where);
-    }
-    query.where = whereClause;
-
-    console.log(query.where);
-
-    /*   if (ids && ids.length > 0) {
-      query.where = {
-        id: {
-          in: ids,
-        },
-        ...(where && { where }),
-      };
+      query.where = whereClause;
     }
 
-    if (where)
-      query.where = { ...(query.where && { where: query.where }), ...where }; */
+    if (select) query.select = select;
 
     return this.#rep.findMany(query);
   }
@@ -90,8 +80,8 @@ export class BaseRepository {
     return this.#rep.findMany(query);
   }
 
-  count() {
-    return this.#rep.count();
+  count(criteria) {
+    return this.#rep.count(criteria);
   }
 
   /**

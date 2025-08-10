@@ -1,16 +1,47 @@
+/* eslint-disable no-unused-vars */
 import { LoginDto } from "#dto/user/login-dto.js";
+import { factorService } from "#services/factor-service.js";
 import { userService } from "#services/user-service.js";
 import { appConfigs } from "#utils/app-utils/app-configs.js";
 import { appConstants } from "#utils/app-utils/app-constants.js";
 import { TokenGenerator } from "#utils/auth-utils/token-generator.js";
 import jwt from "jsonwebtoken";
 
-class PageController {
+class UserController {
   //home----------------------------------------------------------
-  home(req, res) {
+  async home(req, res) {
     const user = req.user;
+    const data = await Promise.all([
+      userService.getUsersCount(),
+      factorService.factorsSum(),
+      factorService.getFactorsCount({ where: { status: 1 } }),
+      factorService.getFactorsCount({ where: { status: { not: 3 } } }),
+      factorService.getFactorsCount({ where: { status: 3 } }),
+    ]);
 
-    res.render("home", { name: user?.email });
+    const totalUsersCount = data[0];
+    const totalFactorsPrice = data[1];
+    const totalPendingFactorsCount = data[2];
+    const totalNotCanceledFactorsCount = data[3];
+    const totalCanceledFactorsCount = data[4];
+
+    const percentage =
+      totalPendingFactorsCount + totalNotCanceledFactorsCount > 0
+        ? Math.round(
+            (totalPendingFactorsCount /
+              (totalPendingFactorsCount + totalNotCanceledFactorsCount)) *
+              100
+          )
+        : 0;
+
+    res.render("home", {
+      name: user?.email,
+      totalUsersCount,
+      totalFactorsPrice,
+      totalPendingFactorsCount,
+      totalCanceledFactorsCount,
+      percentage,
+    });
   }
 
   //login----------------------------------------------------------
@@ -79,4 +110,4 @@ class PageController {
   }
 }
 
-export const pageController = new PageController();
+export const userController = new UserController();

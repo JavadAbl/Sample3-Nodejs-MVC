@@ -1,9 +1,9 @@
-import { pageController } from "#controllers/web/web-controller.js";
+import { userController } from "#controllers/web/user-controller.js";
 import { authPageMiddleware } from "#middlewares/auth-page-middleware.js";
 import { validateMiddleware } from "#middlewares/validate-middleware.js";
 import { UserValidator } from "#validators/user-validator.js";
 
-export const pageRoutes = {
+export const userRoutes = {
   domain: "/",
   groupMiddlewares: [],
   routes: [
@@ -11,19 +11,19 @@ export const pageRoutes = {
       method: "get",
       path: "/",
       middlewares: [authPageMiddleware],
-      handler: (req, res) => pageController.home(req, res),
+      handler: (req, res) => userController.home(req, res),
     },
 
     {
       method: "get",
       path: "profile",
-      handler: pageController.profile,
+      handler: userController.profile,
     },
 
     {
       method: "get",
       path: "login",
-      handler: (req, res) => pageController.login(req, res),
+      handler: (req, res) => userController.login(req, res),
     },
 
     {
@@ -36,7 +36,7 @@ export const pageRoutes = {
         },
         validateMiddleware(UserValidator.loginValidator),
       ],
-      handler: (req, res) => pageController.loginPost(req, res),
+      handler: (req, res) => userController.loginPost(req, res),
     },
   ],
 };

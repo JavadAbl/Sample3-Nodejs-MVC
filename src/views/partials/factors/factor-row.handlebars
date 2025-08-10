@@ -11,7 +11,9 @@
     </td>
 
     <td>{{numberToLocaleString price}}</td>
-    <td>{{statusTitle}}</td>
+    <td>
+        <span class="badge {{#if (eq status 1)}}{{bg-warning}}{{/if}}">{{statusTitle}}</span>
+    </td>
     <td class="col-3">{{description}}</td>
 
     <td class="text-center">

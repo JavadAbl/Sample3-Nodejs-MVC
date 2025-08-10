@@ -68,6 +68,11 @@ class UserService {
     const users = await userRepository.findAll();
     return await users.map((user) => new UserDto(user));
   }
+
+  //getUsersCount------------------------------------------------
+  async getUsersCount() {
+    return await userRepository.count();
+  }
 }
 
 export const userService = new UserService();

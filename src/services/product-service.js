@@ -15,7 +15,7 @@ class ProductService {
   //-----------------------------------------------------------
   async getPageProducts(page, take, query) {
     return (
-      await this.productRepository.findPage({
+      await this.productRepository.find({
         page,
         take,
         ...(query && {

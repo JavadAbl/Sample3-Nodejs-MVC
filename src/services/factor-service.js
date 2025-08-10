@@ -18,7 +18,7 @@ class FactorService {
   //-----------------------------------------------------------
   async getPageFactors(page, take) {
     return (
-      await this.factorRepository.findPage({
+      await this.factorRepository.find({
         page,
         take,
         includes: ["products"],
@@ -26,9 +26,9 @@ class FactorService {
     ).map((product) => new FactorDto(product));
   }
 
-  //-----------------------------------------------------------
-  async getFactorsCount() {
-    return await this.factorRepository.count();
+  //getFactorsCount---------------------------------------------
+  async getFactorsCount(criteria) {
+    return await this.factorRepository.count(criteria);
   }
 
   //-----------------------------------------------------------
@@ -70,6 +70,16 @@ class FactorService {
     return this.factorRepository.patch(id, {
       status: 3,
     });
+  }
+
+  //-----------------------------------------------------------
+  async factorsSum() {
+    const factorPrices = await this.factorRepository.find({
+      select: { price: true },
+      where: { status: 2 },
+    });
+
+    return factorPrices.reduce((sum, factor) => sum + factor.price, 0);
   }
 }
 
