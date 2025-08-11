@@ -29,7 +29,8 @@ The dashboard allows admins to **create products**, **generate invoices (factors
 
 ## Project Structure
 
-Sample3-Nodejs-MVC/
+Sample3-Nodejs-MVC
+
 ├── src/
 │ ├── controllers/ # Controllers handle requests and responses
 │ ├── models/ # Database models (via Prisma)
@@ -53,27 +54,27 @@ Sample3-Nodejs-MVC/
    ```bash
    git clone https://github.com/JavadAbl/Sample3-Nodejs-MVC
 
-    Install dependencies:
+Install dependencies:
 
-npm install
+   npm install
 
 Set up your .env file:
 
-DATABASE_URL="file:app.db"
-ACCESS_TOKEN_SECRET=ACCESS_TOKEN_SECRET
-REFRESH_TOKEN_SECRET=REFRESH_TOKEN_SECRET
+   DATABASE_URL="file:app.db"
+   ACCESS_TOKEN_SECRET=ACCESS_TOKEN_SECRET
+   REFRESH_TOKEN_SECRET=REFRESH_TOKEN_SECRET
 
 Run database migrations:
 
-npx prisma migrate dev
+   npx prisma migrate dev
 
 Run Prisma Generate:
 
-npx prisma generate
+   npx prisma generate
 
 Run database Seed:
 
-npx prisma db seed
+   npx prisma db seed
 
 
 Start the application:
@@ -82,8 +83,4 @@ Start the application:
 
 Usage
 
-    Open your browser and go to http://localhost:3000
-
-    Log in as an admin.
-
-    Manage products, create invoices, and view reports.
+Open your browser and go to http://localhost:3000
