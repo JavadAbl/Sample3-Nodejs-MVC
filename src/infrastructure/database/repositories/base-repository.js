@@ -58,29 +58,11 @@ export class BaseRepository {
     return this.#rep.findMany(query);
   }
 
-  findAll({ ids, includes = [] } = {}) {
-    const include = includes.reduce((acc, include) => {
-      acc[include] = true;
-      return acc;
-    }, {});
-
-    const query = {
-      orderBy: { id: "desc" },
-      include,
-    };
-
-    if (ids && ids.length > 0) {
-      query.where = {
-        id: {
-          in: ids,
-        },
-      };
-    }
-
-    return this.#rep.findMany(query);
+  findAll(criteria = {}) {
+    return this.#rep.findMany(criteria);
   }
 
-  count(criteria) {
+  count(criteria = {}) {
     return this.#rep.count(criteria);
   }
 

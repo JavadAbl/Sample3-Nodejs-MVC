@@ -9,8 +9,8 @@ class FactorService {
   }
 
   //-----------------------------------------------------------
-  async getAllFactors() {
-    return (await this.factorRepository.findAll()).map(
+  async getAllFactors(criteria) {
+    return (await this.factorRepository.findAll(criteria)).map(
       (product) => new FactorDto(product)
     );
   }

@@ -17,6 +17,7 @@ class UserController {
       factorService.getFactorsCount({ where: { status: 1 } }),
       factorService.getFactorsCount({ where: { status: { not: 3 } } }),
       factorService.getFactorsCount({ where: { status: 3 } }),
+      factorService.getAllFactors({ where: { status: 2 } }),
     ]);
 
     const totalUsersCount = data[0];
@@ -24,6 +25,7 @@ class UserController {
     const totalPendingFactorsCount = data[2];
     const totalNotCanceledFactorsCount = data[3];
     const totalCanceledFactorsCount = data[4];
+    const factors = data[5];
 
     const percentage =
       totalPendingFactorsCount + totalNotCanceledFactorsCount > 0
@@ -41,6 +43,7 @@ class UserController {
       totalPendingFactorsCount,
       totalCanceledFactorsCount,
       percentage,
+      factors,
     });
   }
 

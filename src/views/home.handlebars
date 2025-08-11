@@ -106,7 +106,7 @@
     <div class="col-lg-8 mb-4">
       <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 fw-bold text-primary">Revenue Overview</h6>
+          <h6 class="m-0 fw-bold text-primary">خلاصه فروش</h6>
           <div class="dropdown no-arrow">
             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
               aria-expanded="false">
@@ -129,7 +129,7 @@
     <div class="col-lg-4 mb-4">
       <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 fw-bold text-primary">Traffic Sources</h6>
+          <h6 class="m-0 fw-bold text-primary">خلاصه محصولات</h6>
           <div class="dropdown no-arrow">
             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
               aria-expanded="false">
@@ -147,9 +147,9 @@
             <canvas id="trafficChart"></canvas>
           </div>
           <div class="mt-4 text-center small">
-            <span class="me-2"><i class="bi bi-circle-fill text-primary"></i> Direct</span>
-            <span class="me-2"><i class="bi bi-circle-fill text-success"></i> Social</span>
-            <span class="me-2"><i class="bi bi-circle-fill text-info"></i> Referral</span>
+            <span class="me-2"><i class="bi bi-circle-fill text-primary"></i> مستقیم</span>
+            <span class="me-2"><i class="bi bi-circle-fill text-success"></i> با واسط</span>
+            <span class="me-2"><i class="bi bi-circle-fill text-info"></i> ارجاعی</span>
           </div>
         </div>
       </div>
@@ -157,7 +157,7 @@
   </div>
 
   <!-- Recent Orders Table -->
-  <div class="card shadow mb-4">
+  {{!-- <div class="card shadow mb-4">
     <div class="card-header py-3">
       <h6 class="m-0 fw-bold text-primary">Recent Orders</h6>
     </div>
@@ -234,22 +234,54 @@
         </table>
       </div>
     </div>
-  </div>
+  </div> --}}
 </div>
 
 
 
 <script>
+
+  const factors = {{{ json factors }}}; // Pass factors data from server to client-side JS
+
   document.addEventListener('DOMContentLoaded', function () {
-    // Revenue Chart
+    // Jalali month names
+    const jalaliMonths = [
+      'فروردین', 'اردیبهشت', 'خرداد', 'تیر',
+      'مرداد', 'شهریور', 'مهر', 'آبان',
+      'آذر', 'دی', 'بهمن', 'اسفند'
+    ];
+
+    // Initialize monthly revenue array (for 12 Jalali months)
+    const monthlyRevenue = new Array(12).fill(0);
+
+    // Aggregate data by Jalali month
+    factors.forEach(transaction => {
+      try {
+        // Parse Gregorian date
+        const gregorianDate = moment(transaction.submitDateTime);
+
+        // Convert to Jalali date
+        const jalaliDate = moment(gregorianDate).locale('fa');
+
+        // Get Jalali month (0-11)
+        const jalaliMonth = jalaliDate.jMonth();
+
+        // Add price to corresponding month
+        monthlyRevenue[jalaliMonth] += Number(transaction.price) || 0;
+      } catch (e) {
+        console.error("Error processing transaction:", transaction.id, e);
+      }
+    });
+
     const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+    // Chart configuration
     const revenueChart = new Chart(revenueCtx, {
       type: 'line',
       data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        labels: jalaliMonths,  // Use Jalali month names
         datasets: [{
-          label: 'Revenue',
-          data: [5000, 8000, 7000, 9000, 12000, 15000, 14000, 16000, 18000, 20000, 22000, 25000],
+          label: 'درآمد',  // "Revenue" in Persian
+          data: monthlyRevenue,
           backgroundColor: 'rgba(78, 115, 223, 0.05)',
           borderColor: 'rgba(78, 115, 223, 1)',
           pointBackgroundColor: 'rgba(78, 115, 223, 1)',
@@ -263,24 +295,35 @@
         }]
       },
       options: {
-        maintainAspectRatio: false,
+        // Add Persian locale settings if needed
         plugins: {
           legend: {
-            display: false
+            labels: {
+              font: {
+                family: 'Vazirmatn, sans-serif'  // Persian font
+              }
+            }
           }
         },
         scales: {
-          y: {
-            beginAtZero: true,
+          x: {
             ticks: {
-              callback: function (value) {
-                return '$' + value.toLocaleString();
+              font: {
+                family: 'Vazirmatn, sans-serif'
+              }
+            }
+          },
+          y: {
+            ticks: {
+              font: {
+                family: 'Vazirmatn, sans-serif'
               }
             }
           }
         }
       }
     });
+
 
     // Traffic Chart
     const trafficCtx = document.getElementById('trafficChart').getContext('2d');

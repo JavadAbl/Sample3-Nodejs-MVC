@@ -50,6 +50,9 @@ export class Server {
           add: (a, b) => a + b,
           subtract: (a, b) => a - b,
           toDateString: (date) => date?.toLocaleString("fa-IR"),
+          json: function (context) {
+            return JSON.stringify(context);
+          },
         },
       })
     );
