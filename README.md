@@ -49,8 +49,6 @@ Sample3-Nodejs-MVC
 
 │ ├── services/ # Business logic
 
-│ ├── services/ # Business logic
-
 │ ├── validators/ # dto validators
 
 │ └── app.js # App entry point
