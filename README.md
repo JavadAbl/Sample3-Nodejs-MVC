@@ -32,19 +32,33 @@ The dashboard allows admins to **create products**, **generate invoices (factors
 Sample3-Nodejs-MVC
 
 ├── src/
+
 │ ├── controllers/ # Controllers handle requests and responses
+
 │ ├── models/ # Database models (via Prisma)
+
 │ ├── views/ # Handlebars templates
+
 │ ├── infrastructure/ # Data logic
+
 │ ├── dto/ # dto models
+
 │ ├── routes/ # Express routes
+
 │ ├── middlewares/ # Custom middleware
+
 │ ├── services/ # Business logic
+
 │ ├── services/ # Business logic
+
 │ ├── validators/ # dto validators
+
 │ └── app.js # App entry point
+
 ├── prisma/ # Prisma schema and migrations
+
 ├── public/ # Static files
+
 └── package.json
 
 
@@ -56,21 +70,21 @@ Sample3-Nodejs-MVC
 
 Install dependencies:
 
-   npm install
+    npm install
 
 Set up your .env file:
 
-   DATABASE_URL="file:app.db"
-   ACCESS_TOKEN_SECRET=ACCESS_TOKEN_SECRET
-   REFRESH_TOKEN_SECRET=REFRESH_TOKEN_SECRET
+    DATABASE_URL="file:app.db"
+    ACCESS_TOKEN_SECRET=ACCESS_TOKEN_SECRET
+    REFRESH_TOKEN_SECRET=REFRESH_TOKEN_SECRET
 
 Run database migrations:
 
-   npx prisma migrate dev
+    npx prisma migrate dev
 
 Run Prisma Generate:
 
-   npx prisma generate
+    npx prisma generate
 
 Run database Seed:
 
