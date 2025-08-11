@@ -74,10 +74,11 @@ Run Prisma Generate:
 
 Run database Seed:
 
-   npx prisma db seed
+    npx prisma db seed
 
 
 Start the application:
+
     npm run dev
 
 Usage
