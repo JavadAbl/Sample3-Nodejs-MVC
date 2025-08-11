@@ -78,7 +78,6 @@ Run database Seed:
 
 
 Start the application:
-
     npm run dev
 
 Usage
